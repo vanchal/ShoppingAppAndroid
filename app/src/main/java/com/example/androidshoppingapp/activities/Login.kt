@@ -47,9 +47,8 @@ class Login : AppCompatActivity() {
             if (emailRegister.isEmpty()  || passRegister.isEmpty()
             ) {
                 Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(emailRegister).matches()) {
-                email.error = "Invalid Email"
-            } else {
+            }
+            else {
                 val userLoginData: LoginRequest = LoginRequest(
                     email = emailRegister,
                     password = passRegister,
@@ -99,7 +98,7 @@ class Login : AppCompatActivity() {
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         this@Login.startActivity(intent)
                     } else {
-                        Toast.makeText(this@Login, "Login failed!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@Login, "All fields are required!, and password must be 8 characters long and must have a number,lower case,upper case and special char", Toast.LENGTH_LONG).show()
                     }
                 }
 

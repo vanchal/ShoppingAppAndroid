@@ -66,7 +66,6 @@ class Cart1 : AppCompatActivity() {
             else{
                 Toast.makeText(this@Cart1, "Add something to Cart", Toast.LENGTH_LONG).show()
             }
-
         }
 
         var backbtn = findViewById<ImageView>(R.id.backbtn)
@@ -77,6 +76,7 @@ class Cart1 : AppCompatActivity() {
 
     companion object {
         var items = ArrayList<CartItemsItem>()
+//        var deletedList = arrayListOf<String>()
     }
 
 
@@ -140,6 +140,7 @@ class Cart1 : AppCompatActivity() {
     private fun cartList(){
         if(AppHelper.isConnected(this))
         {
+            progressBar = findViewById(R.id.progress_bar)
             progressBar?.visibility = View.VISIBLE
             var token = SharedPrefManager.getInstance(applicationContext).token.token.toString()
             Log.e("cartToken", "$token")
@@ -212,6 +213,7 @@ class Cartadapter(var context: Context): RecyclerView.Adapter<Cartadapter.cartvi
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             holder.spinnerItem?.adapter = adapter
+            holder.spinnerItem.setSelection(adapter.getPosition(cartmodel.quantity.toString()))
         }
 
         holder.spinnerItem?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -229,6 +231,7 @@ class Cartadapter(var context: Context): RecyclerView.Adapter<Cartadapter.cartvi
                     quantity = totalOrderValue.toInt()
                 )
                 CartFunc.getInstance(context as Cart1).updateCart(cartmodel.productId,count)
+                Log.e("quantity", "done")
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
@@ -240,6 +243,7 @@ class Cartadapter(var context: Context): RecyclerView.Adapter<Cartadapter.cartvi
                 val prodId = cartmodel.productId.toString()
                 CartFunc.getInstance(context as Cart1).deleteFromCart(prodId)
                 (context as Cart1).deletedList.add(prodId)
+//                deletedList.add(prodId)
                 val index = items.indexOf(cartmodel)
                 if (index != -1) {
                     items.removeAt(index)

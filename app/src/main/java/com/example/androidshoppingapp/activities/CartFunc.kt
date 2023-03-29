@@ -115,6 +115,35 @@ class CartFunc private constructor(var context: Context){
 
     }
 
+    fun emptyCart(){
+        initData()
+        if(AppHelper.isConnected(context))
+        {
+            var token = SharedPrefManager.getInstance(context).token.token.toString()
+            apiInterface.clearCart(token = "Bearer $token").enqueue(object : Callback<EmptyCartResponse> {
+                override fun onResponse(call: Call<EmptyCartResponse>,
+                                        response: Response<EmptyCartResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(context, "Cart Cleared!", Toast.LENGTH_LONG).show()
+
+                    } else {
+                        Toast.makeText(context, "failed!", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<EmptyCartResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Toast.makeText(context, t.message, Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+        else
+        {
+            Toast.makeText(context, "Please check you internet connection", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
 
 

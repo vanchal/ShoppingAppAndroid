@@ -41,11 +41,11 @@ class LandingPage : AppCompatActivity() {
 
 
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Log.e("activityResultLauncher", "registerForActivityResult called")
+            Log.e("activityResultLauncher", "registerForActivityResult called from LandingPage")
+            Log.e("RESULTCODE", "${result.resultCode}")
             if(result.resultCode == RESULT_OK){
-                var list= result.data?.getStringArrayListExtra("deletedList") as ArrayList<String>?
-                Log.e("list", "$list")
-
+                var list = result.data?.getStringArrayListExtra("deletedList") as ArrayList<String>?
+//                Log.e("list", "$list")
                 list?.forEach{item ->
                     var position: Int = productList.indexOfFirst {p->
                         p.id == item
@@ -56,13 +56,36 @@ class LandingPage : AppCompatActivity() {
             }
             else if(result.resultCode == 2){
                 val prodId = result.data?.getStringExtra("prodId")
-                var position : Int = productList.indexOfFirst { p->
-                    p.id == prodId
+                var list = result.data?.getStringArrayListExtra("deletedList") as ArrayList<String>?
+                Log.e("onlandingPageList", "$list")
+//                var position : Int = productList.indexOfFirst { p->
+//                    p.id == prodId
+//                }
+//                (productListView.adapter as Shoppingadapter).notifyItemChanged(position)
+                if(list != null){
+                    list?.forEach{item ->
+                        var position: Int = productList.indexOfFirst {p->
+                            p.id == item
+                        }
+                        productList[position].ispresent = false
+                        (productListView.adapter as Shoppingadapter).notifyItemChanged(position)
+                    }
                 }
-//                LandingPage.productList[position].ispresent = false
-                (productListView.adapter as Shoppingadapter).notifyItemChanged(position)
+                else{
+                    var position : Int = productList.indexOfFirst { p->
+                        p.id == prodId
+                    }
+                    (productListView.adapter as Shoppingadapter).notifyItemChanged(position)
+                }
             }
         }
+
+//        var cart_badge = findViewById<ImageView>(R.id.cart_contains_item)
+//        Log.e("items", "$Cart1.items.size")
+//        if(Cart1.items.size < 0){
+//            cart_badge.visibility = View.GONE
+//        }
+
 
 
         var person = findViewById<ImageView>(R.id.person)
@@ -86,10 +109,7 @@ class LandingPage : AppCompatActivity() {
 
 
     private fun initData() {
-        /*Creating the instance of retrofit */
         retrofit = RetrofitClient.getInstance()
-
-        /*Get the reference of Api interface*/
         apiInterface = retrofit.create(ApiInterface::class.java)
     }
 
@@ -97,6 +117,7 @@ class LandingPage : AppCompatActivity() {
     private fun getProductList(){
         if(AppHelper.isConnected(this))
         {
+            progressBar = findViewById(R.id.products_progress_bar)
             progressBar?.visibility = View.VISIBLE
             var token = SharedPrefManager.getInstance(applicationContext).token.token.toString()
             apiInterface.getProductList(token = "Bearer $token")?.enqueue(object : Callback<ProductListResponse?> {
@@ -160,27 +181,7 @@ class Shoppingadapter(var context: Context): RecyclerView.Adapter<Shoppingadapte
         holder.productprice.text = shoppingmodel.price
         val imageUrl = shoppingmodel.image
         Picasso.get().load(imageUrl).into(holder.prodimg)
-//        Glide.with(context)
-//            .load(imageUrl)
-//            .into(holder.prodimg)
 
-        val eachCard = holder.itemView
-        eachCard.setOnClickListener {
-            val intent = Intent(context, ProdDetail::class.java)
-            intent.putExtra("prodId", shoppingmodel.id)
-            intent.putExtra("img1", shoppingmodel.image)
-            intent.putExtra("img2",shoppingmodel.image)
-            intent.putExtra("text1", shoppingmodel.name)
-            intent.putExtra("text2", shoppingmodel.price)
-            intent.putExtra("text3", shoppingmodel.description)
-            if(holder.addButton.text == "Go To Cart"){
-                intent.putExtra("addButton", "Go To Cart")
-            }
-            else{
-                intent.putExtra("addButton", "ADD")
-            }
-            context.startActivity(intent)
-        }
 
 
         if(shoppingmodel.ispresent == true)
@@ -213,6 +214,37 @@ class Shoppingadapter(var context: Context): RecyclerView.Adapter<Shoppingadapte
 
                 CartFunc.getInstance(context as LandingPage).addToCart(addItemRequest, holder.addButton)
             }
+        }
+
+        val eachCard = holder.itemView
+        eachCard.setOnClickListener {
+            val intent = Intent(context, ProdDetail::class.java)
+            intent.putExtra("prodId", shoppingmodel.id)
+            intent.putExtra("img1", shoppingmodel.image)
+//            intent.putExtra("img2",shoppingmodel.image)
+            intent.putExtra("text1", shoppingmodel.name)
+            intent.putExtra("text2", shoppingmodel.price)
+            intent.putExtra("text3", shoppingmodel.description)
+            intent.putExtra("image1", shoppingmodel?.carousel?.get(1)!!)
+            intent.putExtra("image2", shoppingmodel?.carousel?.get(2)!!)
+            intent.putExtra("image3", shoppingmodel?.carousel?.get(3)!!)
+            intent.putExtra("image4", shoppingmodel?.carousel?.get(2)!!)
+//            if(shoppingmodel.ispresent == true){
+//                intent.putExtra("addButton", "Go To Cart")
+//            }
+//            else{
+//                intent.putExtra("addButton", "ADD")
+//            }
+            if(holder.addButton.text.toString().equals("Go To Cart", ignoreCase = true)){
+                Log.e("intent", "intent is passing")
+                intent.putExtra("addButton", "Go To Cart")
+            }
+            else{
+                Log.e("intent2", "intent is passing2")
+                intent.putExtra("addButton", "ADD")
+            }
+            activityResultLauncher?.launch(intent)
+//            context.startActivity(intent)
         }
 
 //      if(shoppingmodel.ispresent == true){

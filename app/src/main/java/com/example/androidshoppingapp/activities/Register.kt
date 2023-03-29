@@ -107,7 +107,7 @@ class Register : AppCompatActivity() {
                         Toast.makeText(this@Register, "Registration success!", Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        Toast.makeText(this@Register, "Registration failed!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@Register, "password must be 8 characters long and must have a number,lower case,upper case and special char", Toast.LENGTH_LONG).show()
                     }
                 }
 

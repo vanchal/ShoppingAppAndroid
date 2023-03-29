@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/header"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         >
@@ -26,7 +27,6 @@
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
             />
 
         <ImageView
@@ -38,6 +38,15 @@
             app:layout_constraintEnd_toStartOf="@id/cart"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        <include-->
+<!--            android:id="@+id/cart"-->
+<!--            layout="@layout/cart_badge"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"/>-->
+
+
         <ImageView
             android:id="@+id/cart"
             android:layout_width="35dp"
@@ -46,8 +55,21 @@
             android:src="@drawable/baseline_shopping_cart_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             />
+
+        <ImageView
+            android:id="@+id/cart_contains_item"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="152dp"
+            android:background="@drawable/badge_shape"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -58,5 +80,22 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="118dp"
         tools:layout_editor_absoluteY="214dp" />
+    <ProgressBar
+        android:id="@+id/products_progress_bar"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:indeterminateTint="#4169E1"
+        android:visibility="visible"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+<!--        app:layout_constraintTop_toBottomOf="@id/text" />-->
 
 </LinearLayout>
+
+

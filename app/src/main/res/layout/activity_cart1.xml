@@ -75,6 +75,20 @@
             android:layout_marginBottom="20dp"
             />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:indeterminateTint="#4169E1"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircleRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header1"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ordercard"
@@ -179,9 +193,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

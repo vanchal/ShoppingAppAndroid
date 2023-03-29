@@ -42,6 +42,8 @@ interface ApiInterface {
     @DELETE("cart/deleteCart/{productId}")
     fun deleteItem( @Header("Authorization") token: String?, @Path(value = "productId") productId : String?) : Call<DeleteItemResponse>
 
+    @DELETE("cart/emptyCart")
+    fun clearCart( @Header("Authorization") token: String?) : Call<EmptyCartResponse>
 
     @POST("order/placeOrder")
     fun plcaeOrder(@Header("Authorization") token : String?, @Body order : OrderPlaceRequest) : Call<OrderPlaceResponse>
